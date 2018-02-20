@@ -3,8 +3,8 @@
 namespace Tests;
 
 use App\User;
-use Kfirba\Factor\PendingModel;
 use Faker\Generator as Faker;
+use Kfirba\Factor\PendingModel;
 use PHPUnit\Framework\TestCase;
 use Illuminate\Database\Eloquent\Factory;
 
@@ -35,7 +35,7 @@ class FactorTest extends TestCase
     {
         $instances = make(User::class, [], 4);
 
-        $this->assertCount(4, $instances);
+        $this->assertEquals(4, $instances->count());
     }
 
     /** @test */

@@ -13,11 +13,7 @@ use Kfirba\Factor\PendingModel;
  */
 function create($model, $overrides = [], $times = 1)
 {
-    if ($times > 1) {
-        return factory($model, $times)->create($overrides);
-    }
-
-    return new PendingModel('create', $model, $overrides);
+    return new PendingModel('create', $model, $overrides, $times);
 }
 
 /**
@@ -31,9 +27,5 @@ function create($model, $overrides = [], $times = 1)
  */
 function make($model, $overrides = [], $times = 1)
 {
-    if ($times > 1) {
-        return factory($model, $times)->make($overrides);
-    }
-
-    return new PendingModel('make', $model, $overrides);
+    return new PendingModel('make', $model, $overrides, $times);
 }

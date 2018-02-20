@@ -35,17 +35,25 @@ class PendingModel
     protected $overrides;
 
     /**
+     * Number of instances to create.
+     *
+     * @var int
+     */
+    protected $times;
+
+    /**
      * Model state.
      *
      * @var array|mixed
      */
     protected $states;
 
-    public function __construct($action, $abstract, $overrides = [])
+    public function __construct($action, $abstract, $overrides = [], $times = 1)
     {
         $this->action = $action;
         $this->abstract = $abstract;
         $this->overrides = $overrides;
+        $this->times = $times;
     }
 
     /**
@@ -98,7 +106,7 @@ class PendingModel
      */
     public function buildModel()
     {
-        $builder = factory($this->abstract);
+        $builder = factory($this->abstract)->times($this->times === 1 ? null : $this->times);
 
         if (! empty($this->states)) {
             $builder->states($this->states);
