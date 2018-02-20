@@ -1,6 +1,6 @@
 <?php
 
-namespace Kfirba;
+namespace Kfirba\Factor;
 
 use Illuminate\Database\Eloquent\Model;
 

@@ -3,7 +3,7 @@
 namespace Tests;
 
 use App\User;
-use Kfirba\PendingModel;
+use Kfirba\Factor\PendingModel;
 use Faker\Generator as Faker;
 use PHPUnit\Framework\TestCase;
 use Illuminate\Database\Eloquent\Factory;

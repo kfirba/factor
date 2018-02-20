@@ -1,6 +1,6 @@
 <?php
 
-use Kfirba\PendingModel;
+use Kfirba\Factor\PendingModel;
 
 /**
  * Create a collection of models and persist them to the database.
