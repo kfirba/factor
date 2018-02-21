@@ -9,6 +9,8 @@ $ composer require --dev kfirba/factor
 
 ## Usage
 
+> I've written a more []detailed blog about this package](https://kfirba.me/blog/factor-short-and-expressive-way-to-use-laravels-factories). Make sure to check it out!
+
 The package registers 2 global methods:
 
 1. `make($model, $overrides = [], $times = 1)`
@@ -29,6 +31,20 @@ $user = make(User::class, $overrides, $times);
 ```
 
 It looks like that `create()` and `make()` methods are just simple aliases to the `factory()->{$method}()`, but this is where it gets interesting.
+
+## I Want to Decide!
+
+It may sometimes feel "right" to pass the number of objects we want to build as the second argument instead of the overrides. Factor lets you do that. If you pass an integer as the second argument, it will assume you are trying to set the number of objects to create:
+
+```php
+make(User::class, 3);
+// Equivalent to:
+make(User::class, [], 3);
+
+make(User::class, 3, ['name' => 'John']);
+// Equivalent to:
+make(User::class, ['name' => 'John'], 3);
+```
 
 ## States
 
