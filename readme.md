@@ -9,7 +9,7 @@ $ composer require --dev kfirba/factor
 
 ## Usage
 
-> I've written a more []detailed blog about this package](https://kfirba.me/blog/factor-short-and-expressive-way-to-use-laravels-factories). Make sure to check it out!
+> I've written a more [detailed blog about this package](https://kfirba.me/blog/factor-short-and-expressive-way-to-use-laravels-factories). Make sure to check it out!
 
 The package registers 2 global methods:
 
@@ -77,6 +77,25 @@ echo $admin->callMe();
 
 Pay close attention to the above `admin` state.
 We call the `states()` method directly on the `make()` returned value and we are still able to access any property or method off of the actual instance. **This is exactly the added bonus this package offers.**
+
+## <small>small</small> Caveat (Immediate Creation of Models)
+
+Sometimes we want to create models just as a part of the test's setup but we never really need to directly interact with them.
+Factor will not immediately create the models but will decide in real-time when they need to be created.
+This behavior will break your tests if you rely on the models to exist in the database only.
+To overcome this shortcoming, Factor also provides a `now()` method which will let you use it's elegant and expressive syntax but tell to immediately create the models:
+
+```php
+create(User::class);
+// -> 'Kfirba\Factor\PendingModel'
+create(User::class)->now();
+// -> 'App\User'
+
+create(User::class)->states('admin');
+// -> 'Kfirba\Factor\PendingModel'
+create(User::class)->states('admin')->now();
+// -> 'App\User'
+```
 
 ## License
 Factor is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
