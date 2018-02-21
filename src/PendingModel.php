@@ -2,9 +2,11 @@
 
 namespace Kfirba\Factor;
 
+use Countable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Collection;
 
-class PendingModel
+class PendingModel implements Countable
 {
     /**
      * The underlying model instance.
@@ -54,6 +56,8 @@ class PendingModel
         $this->abstract = $abstract;
         $this->overrides = $overrides;
         $this->times = $times;
+
+        $this->swap();
     }
 
     /**
@@ -65,9 +69,7 @@ class PendingModel
      */
     public function __get($name)
     {
-        $this->ensureModelExists();
-
-        return $this->model->{$name};
+        return $this->model()->{$name};
     }
 
     /**
@@ -80,9 +82,19 @@ class PendingModel
      */
     public function __call($name, $arguments)
     {
-        $this->ensureModelExists();
+        return $this->model()->{$name}(...$arguments);
+    }
 
-        return $this->model->{$name}(...$arguments);
+    /**
+     * Swap the 'times' and 'overrides' parameters when needed.
+     */
+    public function swap()
+    {
+        if (is_integer($this->overrides)) {
+            $temp = $this->times;
+            $this->times = $this->overrides;
+            $this->overrides = $temp;
+        }
     }
 
     /**
@@ -100,9 +112,33 @@ class PendingModel
     }
 
     /**
+     * Creates and caches the model instance.
+     *
+     * @return Model
+     */
+    public function now()
+    {
+        return $this->model();
+    }
+
+    /**
+     * Get the underlying model instance.
+     *
+     * @return Model
+     */
+    public function model()
+    {
+        if (empty($this->model)) {
+            $this->model = $this->buildModel();
+        }
+
+        return $this->model;
+    }
+
+    /**
      * Builds the underlying model.
      *
-     * @return void
+     * @return Model|Collection
      */
     public function buildModel()
     {
@@ -112,18 +148,20 @@ class PendingModel
             $builder->states($this->states);
         }
 
-        $this->model = $builder->{$this->action}($this->overrides);
+        return $builder->{$this->action}($this->overrides);
     }
 
     /**
-     * Ensures that the underlying model was already built.
+     * Count elements of an object.
      *
-     * @return void
+     * @return int
      */
-    protected function ensureModelExists()
+    public function count()
     {
-        if (empty($this->model)) {
-            $this->buildModel();
+        if (method_exists($this->model(), 'count')) {
+            return $this->model()->count();
         }
+
+        throw new \BadMethodCallException('This object is not countable');
     }
 }
