@@ -2,7 +2,7 @@
 
 namespace Tests;
 
-use App\User;
+use Kfirba\Factor\User;
 use Faker\Generator as Faker;
 use Illuminate\Database\Eloquent\Model;
 use Kfirba\Factor\PendingModel;
@@ -97,7 +97,7 @@ class FactorTest extends TestCase
     }
 }
 
-namespace App;
+namespace Kfirba\Factor;
 
 use Illuminate\Database\Eloquent\Model;
 
